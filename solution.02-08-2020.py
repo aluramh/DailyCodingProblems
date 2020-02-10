@@ -39,7 +39,7 @@ def sort(tuples):
 def serialize(root):
     array = []
     traverse(root, 1, array)
-    print(1, array)
+    print(array)
 
 
 # node = Node(
