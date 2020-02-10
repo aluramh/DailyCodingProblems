@@ -28,6 +28,7 @@ def serialize(node, show=False):
     def helper(node, i):
         if node:
             nodes.append((i, node.val))
+
         elif node is None:
             nodes.append((i, 'X'))
 
@@ -41,7 +42,7 @@ def serialize(node, show=False):
     # Sort
     nodes.sort(key=lambda x: x[0])
 
-    # Remove index
+    # Remove index and leave just val
     final = map(lambda x: x[1], nodes)
 
     # Generate string
