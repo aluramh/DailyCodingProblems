@@ -18,7 +18,6 @@ def other_solution(numbers):
     # Remove duplicates
     # O(n)
     filtered_iterable = list(filter(lambda x: x > 0, numbers))
-    print(filtered_iterable)
 
     # Iterate and find the first false index==number
     # O(n)
@@ -53,11 +52,28 @@ def solution(numbers):
     return lowest
 
 
+def set_solution(numbers):
+    # Build set
+    # Each insertion in a set is O(1), thus:
+    # O(n)
+    set_numbers = set(numbers)
+
+    # Iterate and find the first false index that is not inside the set
+    # O(n)
+    index = 1
+    while index in set_numbers:
+        index += 1
+
+    return index
+
+
 try:
     assert other_solution([3, 4, -1, 1]) == 2
+    assert set_solution([3, 4, -1, 1]) == 2
     print('Passed test 1')
 
     assert other_solution([1, 2, 0]) == 3
+    assert set_solution([1, 2, 0]) == 3
     print('Passed test 2')
 
 except AssertionError as error:
