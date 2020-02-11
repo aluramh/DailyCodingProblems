@@ -20,38 +20,53 @@ class Node:
 # Constants
 ROOT = Node('root', Node('left', Node('left.left')), Node('right'))
 SEPARATOR = '  '
+EMPTY = 'X'
 
 
 def serialize(node, show=False):
     nodes = []
 
-    def helper(node, i):
+    def helper(node):
         if node:
-            nodes.append((i, node.val))
+            nodes.append(node.val)
 
         elif node is None:
-            nodes.append((i, 'X'))
+            nodes.append(EMPTY)
 
         if node is not None:
-            helper(node.left, i * 2)
-            helper(node.right, i * 2 + 1)
+            helper(node.left)
+            helper(node.right)
 
-    # Generate
-    helper(node, 1)
-
-    # Sort
-    nodes.sort(key=lambda x: x[0])
-
-    # Remove index and leave just val
-    final = map(lambda x: x[1], nodes)
-
-    # Generate string
-    s = SEPARATOR.join(list(final))
-
-    if show:
-        print(s)
-
-    return
+    helper(node)
+    return SEPARATOR.join(nodes)
 
 
-serialize(ROOT, True)
+def deserialize(s):
+    # Returns a node with all the left/right
+    def helper():
+        val = next(vals)
+        print('NEXT VALS ==>', val)
+
+        # If we reach the end, then it's a leaf and it's the last one
+        if val is None or val is 'X':
+            return None
+
+        # Returns, recursivelly, the complete Node tree
+        node = Node(val, helper(), helper())
+        return node
+
+    # Get an iteration from the list of the split data
+    vals = iter(s.split(SEPARATOR))
+
+    # Start the helper that returns a node with all the
+    # deserialized nodes
+    return helper()
+
+
+# Serialize
+l = serialize(ROOT)
+print(l)
+
+# Deserialize
+d = deserialize(l)
+print(serialize(d))
