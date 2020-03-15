@@ -4,9 +4,21 @@
 # You can assume that the messages are decodable. For example, '001' is not allowed.
 
 from collections import defaultdict
+from time import time
 
 
-def num_encodings_n_squared(s):
+def time_execution(f):
+    def wrapper(*args, **kwargs):
+        start_time = time()
+        answer = f(*args, **kwargs)
+        end_time = time()
+        print('Execution took: {}'.format(end_time - start_time))
+        return answer
+
+    return wrapper
+
+
+def _num_encodings_n_squared(s):
     # If it starts with 0 it is not encodable
     if s.startswith('0'):
         return 0
@@ -21,15 +33,15 @@ def num_encodings_n_squared(s):
     # check if the first 2 digits are less than 26. Then pair this + all the number of
     # ways the rest of the digits can be encoded
     if int(s[:2]) <= 26:
-        total += num_encodings_n_squared(s[2:])
+        total += _num_encodings_n_squared(s[2:])
 
     # Also recursively analyze as if we had chosen only the first digit + all the number
     # of ways the rest of the digits can be encoded
-    total += num_encodings_n_squared(s[1:])
+    total += _num_encodings_n_squared(s[1:])
     return total
 
 
-def num_encodings(s):
+def _num_encodings(s):
     # On lookup, this hashmap returns a default value of 0 if the key doesn't exist
     # cache[i] gives us # of ways to encode the substring s[i:].
     # e.g.: In cache[0] we store the # of ways to encode the string from 0 -> len(string).
@@ -41,35 +53,48 @@ def num_encodings(s):
     cache[len(s)] = 1  # Empty string is 1 valid encoding
 
     for i in reversed(range(len(s))):
-        print(i)
         # Check if it starts with 0, because 0 has no encodings
         if s[i].startswith('0'):
-            return 0  # (go to next loop)
+            cache[i] = 0
 
-        # Check if it's a single digit
-        # (go to next loop)
+        # If it's up to this point, the string len HAS to be equal to 1 and a
+        # single digit only has 1 valid encoding.
         elif i == len(s) - 1:
             cache[i] = 1
 
         else:
-            # If 2 digits are less than 26 (can use 2 digits + whatever comes next)
+            # check if the next 2 digits can be decoded together (less than 26)
             if int(s[i:i + 2]) <= 26:
+                # if they are, they are a single option that can be paired with whatever comes next
+                # (that is why +2)
                 cache[i] = cache[i + 2]
 
-            # sum these previous 2 and store in cache
+            # also consider the single digit option and pair it with whatever comes 1 more after
+            # this digit
+            # It is "+=" because the num of encodings at this point is consider single and double digit usage
             cache[i] += cache[i + 1]
 
     return cache[0]
+
+
+@time_execution
+def num_encodings_n_squared(s):
+    return _num_encodings_n_squared(s)
+
+
+@time_execution
+def num_encodings(s):
+    return _num_encodings(s)
 
 
 try:
     assert num_encodings('111') == 3
     print('Success!')
 
-    answer = num_encodings_n_squared('134572310945672346')
-    assert answer == 8
-
-    print('Success!')
+    # Test for speed
+    q = '13411111122123321257231094561094567234613346134572310945612323094567223424346'
+    print(num_encodings(q))
+    print(num_encodings_n_squared(q))
 
 except AssertionError:
     print('Failed!')
