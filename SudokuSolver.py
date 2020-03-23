@@ -1,16 +1,16 @@
 from numpy import matrix
-from random import randint
 
 
 class SudokuSolver:
     board = None
+    moves = []
     solutions_count = 0
-
-    def __init__(self):
-        self.generate_random_board()
 
     def __init__(self, board):
         self.board = board
+
+    def generate_random_board(self):
+        pass
 
     def print_board(self):
         print(matrix(self.board))
@@ -47,6 +47,7 @@ class SudokuSolver:
                     for n in range(1, 10):
                         if self.possible_move(x, y, n):
                             self.board[x][y] = n
+                            self.moves.append({"x": x, "y": y, "num": n})
                             self.solve()  # keep finding numbers...
 
                             # backtrack because we returned here
@@ -60,40 +61,14 @@ class SudokuSolver:
         # place in the grid. this means we're finished. print result.
         self.solutions_count += 1
 
+        # save the moves it took
+        moves_count = len(self.moves)
+        print(moves_count)
+        print(self.moves)
+        self.moves = []
+
         # print the board
         self.print_board()
-
-    def generate_random_board(self):
-        # Constants
-        empty_board = [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ]
-        MAX = 81
-
-        # init
-        self.board = empty_board
-        # choose how many number will be pre-filled
-        numbers_to_fill = randint(MAX // 2, MAX)
-        next_n = 1
-
-        for i in range(0, numbers_to_fill):
-            box = randint(0, MAX)
-
-            if self.possible_move()
-            self.board[box] = next_n
-
-            # set up for next
-            next_n += 1
-            if next_n > 9:
-                next_n = 1
 
 
 board1 = [[0, 3, 0, 0, 0, 0, 0, 8, 9],
@@ -107,8 +82,6 @@ board1 = [[0, 3, 0, 0, 0, 0, 0, 8, 9],
           [0, 0, 1, 0, 0, 0, 0, 0, 8]]
 
 
-# board = SudokuSolver(board1)
-# board.solve()
-# print("This board has {} solution(s)".format(board.solutions_count))
-
-generate_random_board()
+board = SudokuSolver(board1)
+board.solve()
+print("This board has {} solution(s)".format(board.solutions_count))
