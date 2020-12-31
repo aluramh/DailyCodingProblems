@@ -58,8 +58,8 @@ def max_root_sum(tree_root):
         elif right_max_sum == max_sum:
             max_sum_list = right_list
         else:
-            max_sum_list = left_root_path_list + [root.val
-                                                  ] + right_root_path_list
+            sorted_right = list(reversed(right_root_path_list))
+            max_sum_list = left_root_path_list + [root.val] + sorted_right
 
         # Finds the maximum path including and ending at the root.
         # i.e.: this is the path that is a single line from a leaf node up to the current root node.
