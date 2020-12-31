@@ -40,11 +40,9 @@ def max_root_sum(tree_root):
         right_max_sum, right_path, right_list, right_root_path_list = helper(
             root.right)
 
-        if root.val == tree_root.val:
-            print('At the root')
-
-        if root.val == 2:
-            print('At "2"')
+        # For debugging:
+        # if root.val == tree_root.val:
+        #     print('At the root')
 
         # Calculates the max path using the root.
         # We use max(0, XYZ) because this could be a None value (we are in a leaf!)
@@ -82,9 +80,12 @@ def max_root_sum(tree_root):
 
 if __name__ == '__main__':
     try:
-        # max_sum, _, nodes_list = max_root_sum(Node(-1, Node(2), Node(3)))
-        # assert max_sum == 4
+        # ANCHOR: - Test case 1
+        max_sum, _, nodes_list, _ = max_root_sum(Node(-1, Node(2), Node(3)))
+        print('Follow', nodes_list, 'for a max sum of', max_sum)
+        assert max_sum == 4
 
+        # ANCHOR: - Test case 2
         tree_2 = Node(
             -1,
             # Left subtree
@@ -92,17 +93,19 @@ if __name__ == '__main__':
             # Rigth subtree
             Node(3, None, Node(7)))
         max_sum, _, nodes_list, _ = max_root_sum(tree_2)
-        print(nodes_list)
+        print('Follow', nodes_list, 'for a max sum of', max_sum)
         assert max_sum == 17
 
-        # tree_3 = Node(
-        #     -3,
-        #     # Left subtree
-        #     Node(4),
-        #     # Rigth subtree
-        #     Node(2, None, Node(5)))
-        # max_sum, _, nodes_list = max_root_sum(tree_3)
-        # assert max_sum == 7
+        # ANCHOR: - Test case 3
+        tree_3 = Node(
+            -3,
+            # Left subtree
+            Node(4),
+            # Rigth subtree
+            Node(2, None, Node(5)))
+        max_sum, _, nodes_list, _ = max_root_sum(tree_3)
+        print('Follow', nodes_list, 'for a max sum of', max_sum)
+        assert max_sum == 8
 
         print('Completed without errors')
     except AssertionError as e:
