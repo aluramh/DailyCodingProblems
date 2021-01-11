@@ -96,7 +96,7 @@ if __name__ == "__main__":
         print(result)
 
         print("started")
-        result = how_sum(300, [7, 14])
+        result = how_sum(299, [7, 14])
         print(result)
         assert (isinstance(result, list) == 3)
 
