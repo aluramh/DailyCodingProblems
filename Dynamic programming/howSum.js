@@ -1,20 +1,26 @@
-const howSum = (targetSum, numbers, memo = {}) => {
-  if (targetSum in memo) return memo[targetSum];
-  if (targetSum === 0) return [];
-  if (targetSum < 0) return null;
+const howSum = (targetSum, numbers) => {
+  const memo = {};
 
-  for (let num of numbers) {
-    const remainder = targetSum - num;
-    const remainderResult = howSum(remainder, numbers, memo);
+  function helper(targetSum) {
+    if (targetSum in memo) return memo[targetSum];
+    if (targetSum === 0) return [];
+    if (targetSum < 0) return null;
 
-    if (remainderResult !== null) {
-      memo[targetSum] = [...remainderResult, num];
-      return memo[targetSum];
+    for (let num of numbers) {
+      const remainder = targetSum - num;
+      const remainderResult = helper(remainder);
+
+      if (remainderResult !== null) {
+        memo[targetSum] = [...remainderResult, num];
+        return memo[targetSum];
+      }
     }
+
+    memo[targetSum] = null;
+    return null;
   }
 
-  memo[targetSum] = null;
-  return null;
+  return helper(targetSum);
 };
 
 console.log(howSum(7, [2, 3]));
