@@ -38,8 +38,9 @@ def how_sum(target_sum, numbers):
     store = {}
 
     def helper(target_sum):
+        # If the result has already been memoized, then just return it
         if target_sum in dict.keys(store):
-            store[target_sum]
+            return store[target_sum]
 
         # NOTE: - DO NOT MEMOIZE. PREMATURE MEMOIZATION. For these base cases return the value itself.
         #         That will be done automagically further down the recursion.
@@ -72,11 +73,11 @@ if __name__ == "__main__":
     try:
         # ANCHOR: - Recursion
 
-        # result = how_sum_recursive(7, [5, 3, 4, 7])
-        # assert isinstance(result, list) is True
+        result = how_sum_recursive(7, [5, 3, 4, 7])
+        assert isinstance(result, list) is True
 
-        # result = how_sum_recursive(7, [5, 3, 6])
-        # assert isinstance(result, list) is False
+        result = how_sum_recursive(7, [5, 3, 6])
+        assert isinstance(result, list) is False
 
         # Deep recursion problem => Stack overflow
         # result = how_sum_recursive(300, [7, 14])
@@ -84,23 +85,23 @@ if __name__ == "__main__":
 
         # ANCHOR: - Dynamic programming
 
-        # result = how_sum(7, [5, 3, 4, 7])
-        # print(result)
-        # assert isinstance(result, list) is True
+        result = how_sum(7, [5, 3, 4, 7])
+        print(result)
+        assert isinstance(result, list) is True
 
-        # result = how_sum(7, [5, 3, 6])
-        # print(result)
-        # assert isinstance(result, list) is False
+        result = how_sum(7, [5, 3, 6])
+        print(result)
+        assert isinstance(result, list) is False
 
         result = how_sum(8, [2, 3, 5])
         print(result)
 
-        print("started")
-        result = how_sum(299, [7, 14])
+        result = how_sum(300, [7, 14])
         print(result)
-        assert (isinstance(result, list) == 3)
+        assert isinstance(result, list) is False
 
         print("Program finished with no errors 😉")
 
     except AssertionError as e:
         print(e)
+        print("There was an assertion error")

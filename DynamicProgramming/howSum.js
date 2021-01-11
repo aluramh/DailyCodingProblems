@@ -2,7 +2,9 @@ const howSum = (targetSum, numbers) => {
   const memo = {};
 
   function helper(targetSum) {
-    if (targetSum in memo) return memo[targetSum];
+    if (targetSum in memo) {
+      return memo[targetSum];
+    }
     if (targetSum === 0) return [];
     if (targetSum < 0) return null;
 
