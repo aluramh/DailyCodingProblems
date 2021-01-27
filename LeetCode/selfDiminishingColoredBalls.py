@@ -49,7 +49,6 @@ class Solution:
 
 
 if __name__ == "__main__":
-
     try:
         tests = [
             # ([2, 5], 4, 14),
