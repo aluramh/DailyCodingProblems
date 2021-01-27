@@ -24,54 +24,6 @@
 # Input: "example"
 # Output: 4
 
-import numpy
-
-
-class SolutionNotOptimal:
-    def __init__(self):
-        self.decrement_count = 0
-
-    # O(n)
-    def build_dictionary(self, s):
-        store = {}
-
-        for char in s:
-            store[char] = store.get(char, 0) + 1
-
-        return store
-
-    def set_correctly(self, key, value):
-        has_been_set = False
-
-        while has_been_set is False:
-            # If freq in frequencies array is not taken, then store the key there
-            if self.frequencies[value] == 0:
-                self.frequencies[value] = key
-                has_been_set = True
-            elif value != 0:
-                value -= 1
-                self.decrement_count += 1
-            else:
-                has_been_set = True
-
-    # O(n)
-    def compute_deletion(self, store):
-
-        for key, value in dict.items(store):
-            self.set_correctly(key, value)
-
-        return self.frequencies
-
-    def minDeletions(self, s: str) -> int:
-        freq_dict = self.build_dictionary(s)
-
-        # Based on the frequency dictionary, build the frequencies array
-        max_freq = max(dict.values(freq_dict))
-        self.frequencies = list(numpy.zeros(max_freq + 1, dtype=int))
-
-        self.compute_deletion(freq_dict)
-        return self.decrement_count
-
 
 class Solution:
     def __init__(self):
@@ -88,30 +40,27 @@ class Solution:
 
     # O(n)
     def compute_deletions(self, frequency_list: list):
-        # max_freq = max(map(lambda x: x[1], frequency_list))
+        cutoff_freq = max(map(lambda x: x[1], frequency_list))
         deletions = 0
 
-        for i, (key, value) in enumerate(frequency_list):
-            next_item = None
-            if (i + 1) < len(frequency_list):
-                next_item = frequency_list[i + 1]
+        for i, (key, value) in frequency_list.val
+            if value > cutoff_freq:
+                # Calculate the diff and add it to the deletion count
+                diff = value - cutoff_freq
+                deletions = deletions + diff
+                # Reduce 1 from the max freq
+                cutoff_freq = max((cutoff_freq - 1), 0)
 
-            # Since this is sorted, we can compare with the next item of the list
-            if next_item is not None:
-                if value == next_item[1]:
-                    # Decrease 1 from the next value
-                    deletions += 1
-                    # Leave it 1 less than the current one
-                    frequency_list[i + 1] = (next_item[0], next_item[1] - 1)
-                elif value < next_item[1]:
-                    diff = (next_item[1] - value)
-                    next_val = max((value - 1), 0)
-                    deletions += next_item[1] - next_val
-                    frequency_list[i + 1] = (next_item[0], next_val)
-                else:
-                    # values is 0?
-                    # do nothin?
-                    pass
+            elif value == cutoff_freq:
+                # Reduce 1 from the max freq
+                cutoff_freq = max((cutoff_freq - 1), 0)
+
+            elif value < cutoff_freq:
+                # Level the cutoff freq to the largest number right now, minus 1 for the next iter
+                cutoff_freq = max((value - 1), 0)
+
+            elif value <= 0:
+                pass
 
         return deletions
 
@@ -126,21 +75,19 @@ class Solution:
 
 
 try:
-    print(Solution().minDeletions("aab"))
-    assert Solution().minDeletions("aab") == 0
+    tests = [
+        ("bbcebab", 2),
+        ("accdcdadddbaadbc", 1),
+        ("aab", 0),
+        ("abcabc", 3),
+        ("abcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwz",
+         276),
+    ]
 
-    # print(Solution().minDeletions("bbcebab"))
-    # print(Solution().minDeletions("accdcdadddbaadbc"))
+    for s, expected_val in tests:
+        result = Solution().minDeletions(s)
+        print(result)
+        assert result == expected_val
 
-    print(Solution().minDeletions("abcabc"))
-    assert Solution().minDeletions("abcabc") == 3
-
-    print(Solution().minDeletions(
-        "abcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwz"
-    ))
-
-    assert Solution().minDeletions(
-        "abcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwzabcdefghijklmnopqrstuvwxwz"
-    ) == 276
 except AssertionError as e:
     print("Assertion error")
