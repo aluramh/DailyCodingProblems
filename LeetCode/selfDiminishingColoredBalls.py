@@ -18,6 +18,9 @@ import heapq
 
 class Solution:
     def maxProfit(self, inventory: List[int], orders: int) -> int:
+        buckets = self.group_in_buckets(inventory)
+        inventory = self.ungroup_buckets(buckets)
+
         total_profit = 0
         reverse_inventory = list(map(lambda x: -x, inventory))
 
@@ -44,19 +47,37 @@ class Solution:
 
         return -total_profit
 
-    # def grab_max():
-    #     pass
+    def group_in_buckets(self, inventory: List[int]) -> List[tuple]:
+        bucket_dir = {}
+
+        for item in inventory:
+            bucket_dir[item] = bucket_dir.get(item, 0) + 1
+
+        buckets = list(map(lambda item: item, bucket_dir.items()))
+
+        return buckets
+
+    def ungroup_buckets(self, buckets: List[tuple]) -> List[int]:
+        arr = []
+
+        for (val, frequency) in buckets:
+            for i in range(0, frequency):
+                arr.append(val)
+
+        return arr
 
 
 if __name__ == "__main__":
     try:
         tests = [
-            ([2, 5], 4, 14),
-            ([3, 5], 6, 19),
-            ([2, 8, 4, 10, 6], 20, 110),
-            ([10], 5, 40),
-            ([10], 10, 55),
-            ([1000000000], 1000000000, 500000000500000000),
+            # ([2, 5], 4, 14),
+            # ([3, 5], 6, 19),
+            # ([2, 8, 4, 10, 6], 20, 110),
+            # ([10], 5, 40),
+            # ([10], 10, 55),
+            ([10,
+              10], 10, 80),  # we can group them together and take 2 per turn
+            # ([1000000000], 1000000000, 500000000500000000),
         ]
 
         # Sn = (n / 2)(u1 + un)
