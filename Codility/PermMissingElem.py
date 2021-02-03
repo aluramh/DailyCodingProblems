@@ -84,6 +84,7 @@ if __name__ == "__main__":
             result = solution_2(A)
             print(result)
             assert result == expected_result
+            
 
     except AssertionError as e:
         print("AssertionError", e)
