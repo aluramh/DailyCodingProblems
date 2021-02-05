@@ -1,4 +1,5 @@
 import numpy
+from numpy.core.numeric import Infinity
 
 
 def can_construct(target, A):
@@ -62,7 +63,7 @@ def how_construct(target, A):
 def all_construct(target, A):
     string_length = len(target) + 1
     matrix = list(map(lambda x: [], range(string_length)))
-    matrix[0] = []
+    matrix[0] = [[]]
 
     for cursor in range(string_length):
         # If there is a value in this spot, execute this logic
@@ -75,41 +76,61 @@ def all_construct(target, A):
 
                 if index_with_word < string_length and substring == word:
                     if len(matrix[cursor]) != 0:
-                        options = []
-                        for option in matrix[cursor]:
-                            print(option)
-                            print(word)
-                            options.append(option + [word])
-
-                        
+                        # Iterate through the already available options and
+                        # concatenate this word as a possible option to get
+                        # to this point.
+                        options = list(
+                            map(
+                                lambda option: option + [word],
+                                matrix[cursor],
+                            ))
 
                         # Concatenate these arrays together
-                        matrix[index_with_word] = matrix[index_with_word] + options
+                        matrix[index_with_word] = matrix[
+                            index_with_word] + options
                     else:
                         matrix[index_with_word] = [[word]]
 
     return matrix[len(target)]
 
 
-tests = [
-    # ('abcdef', ['ab', 'abc', 'cd', 'def', 'abcd']),
-    # ('purple', ['purp', 'p', 'ur', 'le', 'purpl']),
-    ('cat', ['cat', 'c', 'at', 'dog'])
-]
+def best_construct(target, A):
+    options = all_construct(target, A)
+    answer = None
+    min_len = -1
+
+    for option in options:
+        option_length = len(option)
+
+        if (answer is None) or (option_length < min_len):
+            answer = option
+            min_len = option_length
+
+    return answer
+
+
+tests = [('abcdef', ['ab', 'abc', 'cd', 'def', 'e', 'f', 'abcd']),
+         ('purple', ['purp', 'p', 'ur', 'le', 'purpl']),
+         ('cat', ['cat', 'c', 'at', 'dog']), ('', ['alex']),
+         ('alex', ['al', 'lex', 'ale', 'a', 'alex']),
+         ('aaaaaaaaaaaaaaaaaaaaaz', ['a', 'aa', 'aaa', 'aaaa'])]
 
 for target, A in tests:
     print("Target:", target)
 
-    # r = can_construct(target, A)
-    # print("can_construct:", r)
+    r = can_construct(target, A)
+    print("can_construct:", r)
 
-    # r = count_construct(target, A)
-    # print("count_construct:", r)
+    r = count_construct(target, A)
+    print("count_construct:", r)
 
-    # r = how_construct(target, A)
-    # print("how_construct:", r)
+    r = how_construct(target, A)
+    print("how_construct:", r)
 
     r = all_construct(target, A)
     print("all_construct:", r)
+
+    r = best_construct(target, A)
+    print("best_construct:", r)
 
     print()
