@@ -17,41 +17,27 @@ import sys
 
 
 def countingValleys(steps, path):
+    """
+    If walking from below 0 UP to 0, then it means we are exiting a valley.
+    """
     D = 'D'
     U = 'U'
 
     # Always starts and ends with sea level
-    altitude_points = list(range(steps))
-    altitude = 0
+    level = 0
+    valleys = 0
 
     # Count the altitude differential points
-    for i, step in enumerate(path):
-        # print(i, step, altitude)
-
+    for step in path:
         # Logic for executing the step itself
-        if step == D:
-            altitude -= 1
-        elif step == U:
-            altitude += 1
-
-        altitude_points[i] = altitude
-
-    # From 0 to 0; All that is between: If positive, it's a mountain. If negative, it's a valley.
-    # Go through the altitude points again
-    valleys = 0
-    cursor = 0
-    while cursor < len(altitude_points):
-        altitude = altitude_points[cursor]
-
-        if altitude < 0:
-            # And continue until we are again at an altitude of 0
-            while altitude != 0:
-                cursor += 1
-                altitude = altitude_points[cursor]
-
-            valleys += 1
-        else:
-            cursor += 1
+        if step == U:
+            level += 1
+            # If we are exiting from a deep; i.e. we were in a valley and are
+            # not in sea-level after this step.
+            if level == 0:
+                valleys += 1
+        elif step == D:
+            level -= 1
 
     return valleys
 
