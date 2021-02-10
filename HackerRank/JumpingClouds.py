@@ -19,7 +19,7 @@ def jumpingOnClouds(c: List[int]):
         if (cursor + 2) < len(c) and c[cursor + 2] == safe:
             cursor += 2
             jumps += 1
-G
+
         elif (cursor + 1) < len(c) and c[cursor + 1] == safe:
             cursor += 1
             jumps += 1
