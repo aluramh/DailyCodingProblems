@@ -144,3 +144,6 @@ static
 
 # vscode settings
 settings.json
+
+# macOS trash
+.DS_Store
