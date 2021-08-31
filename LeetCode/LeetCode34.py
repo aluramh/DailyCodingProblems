@@ -31,9 +31,6 @@ def find_first_index_gt_or_equal_to_target(nums: List[int], target: int):
         mid_index = low + (high - low) // 2
         mid = nums[mid_index]
 
-        log_array = nums[low:high + 1]
-        print(log_array)
-
         # Escape conditional of recursiveness
         if low > high:
             return
@@ -72,7 +69,7 @@ def solve(nums: List[int], target: int):
     # will find the last ocurrence of x in the nums array
     end_pos = find_first_index_gt_or_equal_to_target(nums, target + 1) - 1
 
-    # "first_pos" always has to be less or equal to the "end_pos" in a 
+    # "first_pos" always has to be less or equal to the "end_pos" in a
     # correct answer
     if first_pos <= end_pos:
         return (first_pos, end_pos)
@@ -93,6 +90,7 @@ try:
 
     # MARK: - Edge cases
 
+    assert solve([2, 2], 3) == (-1, -1)
     assert solve([1], 1) == (0, 0)
     assert solve([2], 1) == (-1, -1)
     assert solve([1], 2) == (-1, -1)
