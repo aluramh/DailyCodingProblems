@@ -1,75 +1,62 @@
 from typing import List
 
 
-def binarySearchRows(
-    matrix: List[List[int]],
-    target: int,
-    low: int,
-    high: int,
-    start_index: int = None  # always has to be less than, or equal, target
-) -> int:
-    if high < low:
-        return start_index
-
-    mid_index = low + (high - low) // 2
-    mid = matrix[mid_index][0]  # Because 1 <= n
-
-    # print(f"matrix[{mid_index}]: {matrix[mid_index]} => {mid}")
-    if start_index is None:
-        start_index = mid_index
-
-    if mid == target:
-        return mid_index
-
-    elif mid < target:
-        next_possible_index = binarySearchRows(matrix, target, mid_index + 1,
-                                               high, start_index)
-
-        largest = max(matrix[next_possible_index][0], mid)
-        if largest < target:
-            return mid_index
-        elif matrix[next_possible_index][0] < target:
-            return next_possible_index
-
-    elif mid > target:
-        next_possible_index = binarySearchRows(matrix, target, low,
-                                               mid_index - 1, start_index)
-
-        return min(mid_index, next_possible_index)
-
-
-def binarySearch(row: List[int], target: int, low: int, high: int) -> bool:
-    if high < low:
-        return False
-
-    mid_index = low + (high - low) // 2
-    mid = row[mid_index]
-
-    # print(f"matrix[{mid_index}]: {row[mid_index]}")
-
-    if mid == target:
-        return True
-    elif mid < target:
-        return binarySearch(row, target, mid_index + 1, high)
-    elif mid > target:
-        return binarySearch(row, target, low, mid_index - 1)
-
-
 def main(matrix, target):
+    def binarySearchRows(
+        matrix: List[List[int]],
+        target: int,
+        low: int,
+        high: int,
+    ) -> int:
+        nonlocal min_range
+
+        if high < low:
+            return min_range
+
+        mid_index = low + (high - low) // 2
+        mid = matrix[mid_index][0]  # Because 1 <= n
+
+        if mid == target:
+            return mid_index
+
+        elif mid < target:
+            # Update the place where we found the left-most mid index to the right
+            min_range = mid_index
+            return binarySearchRows(matrix, target, mid_index + 1, high)
+
+        elif mid > target:
+            return binarySearchRows(matrix, target, low, mid_index - 1)
+
+    def binarySearch(row: List[int], target: int, low: int, high: int) -> bool:
+        if high < low:
+            return False
+
+        mid_index = low + (high - low) // 2
+        mid = row[mid_index]
+
+        # print(f"matrix[{mid_index}]: {row[mid_index]}")
+
+        if mid == target:
+            return True
+        elif mid < target:
+            return binarySearch(row, target, mid_index + 1, high)
+        elif mid > target:
+            return binarySearch(row, target, low, mid_index - 1)
+
     # MARK: - Logic start
+
+    # Indices
+    min_range = None
+    max_range = None
+
+    # Initialize range values
+    if min_range is None:
+        min_range = 0
+    if max_range is None:
+        max_range = len(matrix)
 
     target_row_index = binarySearchRows(matrix, target, 0, len(matrix) - 1)
     print(f"target_row_index: {target_row_index}")
-
-    # Check the next index to see if the item may have been there
-    next_index = target_row_index + 1
-    if next_index < len(matrix) and matrix[next_index][0] <= target:
-        target_row_index = next_index
-
-    # If it returns None, then it could be the last row
-    if target_row_index is None:
-        print("target_row_index was None")
-        return False
 
     target_row = matrix[target_row_index]
     is_in_matrix = binarySearch(target_row, target, 0, len(target_row) - 1)
@@ -90,8 +77,9 @@ tests = [
         [58, 60, 62, 62, 62, 63, 63, 65],
         [68, 69, 71, 72, 72, 72, 74, 76],
     ], 76, True),
-    # ([[1]], 0, False),
-    # ([[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], 3, True),
+    ([[1]], 0, False),
+    ([[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], 3, True),
+    ([[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], 6, False),
 ]
 
 for (matrix, target, result) in tests:
