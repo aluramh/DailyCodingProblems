@@ -8,6 +8,11 @@ def main(matrix, target):
         low: int,
         high: int,
     ) -> int:
+        """
+        This function is equivalent of finding the right-most
+        less-than-or-equal value in a list made up of the first
+        items of each row.
+        """
         nonlocal min_range
 
         if high < low:
@@ -28,13 +33,14 @@ def main(matrix, target):
             return binarySearchRows(matrix, target, low, mid_index - 1)
 
     def binarySearch(row: List[int], target: int, low: int, high: int) -> bool:
+        """
+        This is a standard binary search
+        """
         if high < low:
             return False
 
         mid_index = low + (high - low) // 2
         mid = row[mid_index]
-
-        # print(f"matrix[{mid_index}]: {row[mid_index]}")
 
         if mid == target:
             return True
@@ -56,7 +62,7 @@ def main(matrix, target):
         max_range = len(matrix)
 
     target_row_index = binarySearchRows(matrix, target, 0, len(matrix) - 1)
-    print(f"target_row_index: {target_row_index}")
+    print(f"Right-most, left-most item: {target_row_index}")
 
     target_row = matrix[target_row_index]
     is_in_matrix = binarySearch(target_row, target, 0, len(target_row) - 1)
