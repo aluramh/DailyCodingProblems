@@ -1,78 +1,53 @@
-from typing import List
+from typing import List, Tuple
 
 
-def main(matrix, target):
-    def binarySearchRows(
-        matrix: List[List[int]],
-        target: int,
-        low: int,
-        high: int,
-    ) -> int:
-        """
-        This function is equivalent of finding the right-most
-        less-than-or-equal value in a list made up of the first
-        items of each row.
-        """
-        nonlocal min_range
+def main(matrix: List[int], target: int):
+    def getFlatIndexValue(i: int) -> int:
+        nonlocal rows, cols, size
 
-        if high < low:
-            return min_range
+        # Get the row
+        x = i // cols
 
-        mid_index = low + (high - low) // 2
-        mid = matrix[mid_index][0]  # Because 1 <= n
+        # Get the number of items from the previous rows you skipped
+        numbers_to_decrease = (x * cols)
+        # Subtract that number of items from the current index you are at to get the [col]
+        y = i - numbers_to_decrease
 
-        if mid == target:
-            return mid_index
+        return matrix[x][y]
 
-        elif mid < target:
-            # Update the place where we found the left-most mid index to the right
-            min_range = mid_index
-            return binarySearchRows(matrix, target, mid_index + 1, high)
+    def binaryMatrixSearch(matrix: List[int], target: int, low: int,
+                           high: int) -> bool:
+        nonlocal rows, cols, size
 
-        elif mid > target:
-            return binarySearchRows(matrix, target, low, mid_index - 1)
-
-    def binarySearch(row: List[int], target: int, low: int, high: int) -> bool:
-        """
-        This is a standard binary search
-        """
         if high < low:
             return False
 
         mid_index = low + (high - low) // 2
-        mid = row[mid_index]
+
+        # Convert the mid_index to a matrix (x,y) index
+        mid = getFlatIndexValue(mid_index)
 
         if mid == target:
             return True
         elif mid < target:
-            return binarySearch(row, target, mid_index + 1, high)
+            return binaryMatrixSearch(matrix, target, mid_index + 1, high)
         elif mid > target:
-            return binarySearch(row, target, low, mid_index - 1)
+            return binaryMatrixSearch(matrix, target, low, mid_index - 1)
 
-    # MARK: - Logic start
-
-    # Indices
-    min_range = None
-    max_range = None
-
-    # Initialize range values
-    if min_range is None:
-        min_range = 0
-    if max_range is None:
-        max_range = len(matrix)
-
-    target_row_index = binarySearchRows(matrix, target, 0, len(matrix) - 1)
-    print(f"Right-most, left-most item: {target_row_index}")
-
-    target_row = matrix[target_row_index]
-    is_in_matrix = binarySearch(target_row, target, 0, len(target_row) - 1)
-    print(f"is_in_matrix: {is_in_matrix}")
-    return is_in_matrix
+    rows = len(matrix)
+    cols = len(matrix[0])
+    size = rows * cols
+    return binaryMatrixSearch(matrix, target, 0, size - 1)
 
 
 # TESTS
 
 tests = [
+    ([
+        [1, 3, 5, 7],
+        [10, 11, 16, 20],
+        [23, 30, 34, 60],
+    ], 30, True),
     ([
         [-8, -8, -7, -7, -6, -5, -3, -2],
         [0, 0, 1, 3, 4, 6, 8, 8],
