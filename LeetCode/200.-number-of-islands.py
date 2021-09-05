@@ -7,28 +7,33 @@ class Solution:
         lands = {}
         count = 0
 
-        def is_inside_bounds(grid, x, y):
+        def is_inside_bounds(x, y):
             firstRow = grid[0]
             is_inside = x >= 0 and y >= 0 and x < len(grid) and y < len(
                 firstRow)
             return is_inside
 
-        def findLand(grid, lands, x, y):
+        def findLand(lands, x, y):
             # Recursively traverse the neighbors until there are no more neighbors to traverse.
             # Mark them as visited and return 1 when finished.
-            steps = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+            steps = [
+                (1, 0),
+                (0, 1),
+                (-1, 0),
+                (0, -1),
+            ]
 
             for dx, dy in steps:
                 new_x = x + dx
                 new_y = y + dy
                 key = f"{new_x}-{new_y}"
 
-                if is_inside_bounds(grid, new_x,
+                if is_inside_bounds(new_x,
                                     new_y) and grid[new_x][new_y] == "1":
-                    if not key in lands:
+                    if key not in lands:
                         # mark as visited so we don't do it in the future
                         lands[key] = True
-                        findLand(grid, lands, new_x, new_y)
+                        findLand(lands, new_x, new_y)
 
             # after visiting all the neighbors, return 1 since this x,y has been fully visited
             lands[f"{x}{y}"] = True
@@ -40,8 +45,8 @@ class Solution:
                 if grid[i][j] == "1":
                     key = f"{i}-{j}"
 
-                    if not (key in lands):
-                        found_land = findLand(grid, lands, i, j)
+                    if key not in lands:
+                        found_land = findLand(lands, i, j)
                         count += found_land
 
         # print(lands)
