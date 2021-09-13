@@ -44,25 +44,42 @@ def convertListToArray(head: Node) -> List[int]:
 # ANCHOR: - Main
 
 
+def findNext(start: Node) -> Node:
+    n = start
+    while n is not None and n.val == start.val:
+        n = n.next
+
+    return n
+
+
 def removeDuplicates(head: Node) -> Node:
     prev = None
     n = head
 
     # Traverse through the whole list once
     while n is not None:
+        print(n.val)
         nxt = n.next
 
         if nxt is not None and n.val == nxt.val:
-            # Are these duplicated?
-            while n.val == nxt.val:
-                n = nxt.next
+            # This helper traverses the list and finds the next possible
+            # pointer to supplant this one
+            next_possible = findNext(n)
 
-            # Once we exit the loop, then the next possible val is "n"
-            prev.next = n
+            if prev is None:
+                # If the prev is none, then the duplicates are at the
+                # beginning. Replace the "head".
+                head = next_possible
+            else:
+                # "Remove" the duplicates by skipping over them
+                prev.next = next_possible
 
-        # Always move forward in the list
-        prev = n
-        n = n.next
+            # Update "n" and keep going
+            n = next_possible
+        else:
+            # Always move forward in the list
+            prev = n
+            n = n.next
 
     return head
 
@@ -70,6 +87,9 @@ def removeDuplicates(head: Node) -> Node:
 tests = [
     ([1, 2, 3, 3, 4, 4, 5], [1, 2, 5]),
     ([1, 1, 1, 2, 3], [2, 3]),
+    ([1, 2, 4, 4], [1, 2]),
+    ([1, 2, 4, 4, 5, 5], [1, 2]),
+    ([1, 1, 2, 2], []),
 ]
 
 try:
@@ -83,6 +103,8 @@ try:
         # Convert the LL to an array and compare to the expected output
         r = convertListToArray(r_list)
         assert (r == output)
+
+    print("Success!")
 
 except AssertionError:
     print("Error")
