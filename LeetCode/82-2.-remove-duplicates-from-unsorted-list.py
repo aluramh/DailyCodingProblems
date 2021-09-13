@@ -44,20 +44,20 @@ def convertListToArray(head: Node) -> List[int]:
 # ANCHOR: - Main
 
 
-def findNextPossible(start: Node, duplicates) -> Node:
+def findNextPossible(start: Node, d: dict) -> Node:
     """
     From the starting point, finds next possible node in linked list that is 
     not a duplicate.
     """
     n = start
-    while n is not None and duplicates.get(f"{n.val}"):
+    while n is not None and d.get(f"{n.val}") > 1:
         n = n.next
     return n
 
 
 # We have to traverse the full linked list at least once.
-# Time => O(3n) => O(n)
-# Space => O(2n)
+# Time => O(2n) => O(n)
+# Space => O(n)
 def removeDuplicates(head: Node) -> Node:
     n = head
     d = {}
@@ -71,20 +71,14 @@ def removeDuplicates(head: Node) -> Node:
             d[key] += 1
         n = n.next
 
-    # O(n) to go through the dict and remove non-duplicates
-    duplicates = {}
-    for key in d.keys():
-        if d[key] > 1:
-            duplicates[key] = True
-
     # O(n) to go through the array and skip duplicates
     prev = None
     n = head
     while n is not None:
-        if duplicates.get(f"{n.val}"):
+        if d.get(f"{n.val}") > 1:
             # This helper traverses the list and finds the next possible
             # pointer to supplant this one
-            next_possible = findNextPossible(n, duplicates)
+            next_possible = findNextPossible(n, d)
 
             if prev is None:
                 # If the prev is none, then the duplicates are at the
