@@ -44,27 +44,47 @@ def convertListToArray(head: Node) -> List[int]:
 # ANCHOR: - Main
 
 
-def findNext(start: Node) -> Node:
+def findNextPossible(start: Node, duplicates) -> Node:
+    """
+    From the starting point, finds next possible node in linked list that is 
+    not a duplicate.
+    """
     n = start
-    while n is not None and n.val == start.val:
+    while n is not None and duplicates.get(f"{n.val}"):
         n = n.next
-
     return n
 
 
+# We have to traverse the full linked list at least once.
+# Time => O(3n) => O(n)
+# Space => O(2n)
 def removeDuplicates(head: Node) -> Node:
+    n = head
+    d = {}
+
+    # O(n) to get a count of the array
+    while n is not None:
+        key = f"{n.val}"
+        if d.get(key) is None:
+            d[key] = 1
+        else:
+            d[key] += 1
+        n = n.next
+
+    # O(n) to go through the dict and remove non-duplicates
+    duplicates = {}
+    for key in d.keys():
+        if d[key] > 1:
+            duplicates[key] = True
+
+    # O(n) to go through the array and skip duplicates
     prev = None
     n = head
-
-    # Traverse through the whole list once
     while n is not None:
-        print(n.val)
-        nxt = n.next
-
-        if nxt is not None and n.val == nxt.val:
+        if duplicates.get(f"{n.val}"):
             # This helper traverses the list and finds the next possible
             # pointer to supplant this one
-            next_possible = findNext(n)
+            next_possible = findNextPossible(n, duplicates)
 
             if prev is None:
                 # If the prev is none, then the duplicates are at the
@@ -76,8 +96,8 @@ def removeDuplicates(head: Node) -> Node:
 
             # Update "n" and keep going
             n = next_possible
-        else:
-            # Always move forward in the list
+
+        if n is not None:
             prev = n
             n = n.next
 
@@ -86,6 +106,7 @@ def removeDuplicates(head: Node) -> Node:
 
 tests = [
     ([1, 3, 7, 4, 6, 3, 7], [1, 4, 6]),
+    ([1, 7, 4, 4, 7, 1], []),
 ]
 
 try:
@@ -98,9 +119,10 @@ try:
 
         # Convert the LL to an array and compare to the expected output
         r = convertListToArray(r_list)
+        print(r)
         assert (r == output)
 
     print("Success!")
 
 except AssertionError:
-    print("Error")
+    print("Incorrect result")

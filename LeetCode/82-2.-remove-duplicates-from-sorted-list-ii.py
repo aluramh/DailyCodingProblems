@@ -48,7 +48,6 @@ def findNext(start: Node) -> Node:
     n = start
     while n is not None and n.val == start.val:
         n = n.next
-
     return n
 
 
