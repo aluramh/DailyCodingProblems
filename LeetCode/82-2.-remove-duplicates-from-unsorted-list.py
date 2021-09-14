@@ -101,6 +101,7 @@ def removeDuplicates(head: Node) -> Node:
 tests = [
     ([1, 3, 7, 4, 6, 3, 7], [1, 4, 6]),
     ([1, 7, 4, 4, 7, 1], []),
+    ([], []),
 ]
 
 try:
