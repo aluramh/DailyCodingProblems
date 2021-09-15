@@ -2,12 +2,6 @@ from typing import List
 
 
 class Solution:
-    def isOriginal(self, sols, incoming):
-        for sol in sols:
-            if sorted(sol) == sorted(incoming):
-                return False
-        return True
-
     # O(n^3)
     def threeSumCubic(self, nums: List[int]) -> List[List[int]]:
         nums = sorted(nums)
@@ -70,6 +64,12 @@ class Solution:
 
         # We have already gone through all the array, so just exit the
         return threes
+
+    def isOriginal(self, sols, incoming):
+        for sol in sols:
+            if sorted(sol) == sorted(incoming):
+                return False
+        return True
 
 
 # ANCHOR: - Utilities
