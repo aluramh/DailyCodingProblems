@@ -2,6 +2,12 @@ from typing import List
 
 
 class Solution:
+    def isOriginal(self, sols, incoming):
+        for sol in sols:
+            if sorted(sol) == sorted(incoming):
+                return False
+        return True
+
     def threeSum(self, nums: List[int], target: int) -> List[List[int]]:
         # Sort!
         # nums = sorted(nums) # assume sorted
@@ -34,12 +40,6 @@ class Solution:
 
         # We have already gone through all the array, so just exit the
         return threes
-
-    def isOriginal(self, sols, incoming):
-        for sol in sols:
-            if sorted(sol) == sorted(incoming):
-                return False
-        return True
 
     def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
         nums = sorted(nums)
