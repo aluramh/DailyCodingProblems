@@ -52,7 +52,7 @@ def swipe(start: int, end: int):
     return passes_through
 
 
-def solution(pattern):
+def is_valid_pattern(pattern):
     memo = {}
     for i, key in enumerate(pattern):
         print(key)
@@ -91,7 +91,7 @@ tests = [
 ]
 
 for (pattern, expected) in tests:
-    r = solution(pattern)
+    r = is_valid_pattern(pattern)
     assert (r == expected)
 
 print("Success!")
