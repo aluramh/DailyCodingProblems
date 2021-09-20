@@ -16,17 +16,15 @@ def swap_pair(a1, a2):
         L_sum = sum(a2)
         R_sum = sum(a1)
 
-    delta = R_sum - L_sum  
+    delta = R_sum - L_sum  # 4
 
-    for n in L:
-        looking_for = delta - n
+    for m in L:
+        looking_for = (delta / 2) + m
 
         if looking_for in R:
-            return (n, looking_for)
+            return (m, looking_for)
 
     return None
 
 
-r = swap_pair([4, 1, 2, 1, 1, 2], [3, 6, 3, 3])
-print(r)
-assert r == (1, 3)
+assert swap_pair([4, 1, 2, 1, 1, 2], [3, 6, 3, 3]) == (1, 3)
